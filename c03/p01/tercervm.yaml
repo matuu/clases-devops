@@ -1,0 +1,35 @@
+#cloud-config
+hostname: tercervm
+groups:
+  - umcloud
+users:
+  - name: ubuntu
+    shell: /bin/bash
+    sudo: ['ALL=(ALL) NOPASSWD:ALL']
+    ssh-import-id: [jjo, navarrow]
+    lock_passwd: true
+
+  - name: umcloud
+    shell: /bin/bash
+    sudo: ['ALL=(ALL) NOPASSWD:ALL']
+    ssh-import-id: [jjo, navarrow]
+    primary-group: umcloud
+    lock_passwd: true
+
+chpasswd:
+  list: |
+    umcloud:umcloud
+  expire: False
+
+write_files:
+-   content: |
+        # Este es un contenido de prueba
+        # Podria ser un archivo de configuracion
+    path: /tmp/contenido.txt
+
+-   content: |
+        #!/bin/bash
+        # Este es un script
+        echo $1
+    path: /tmp/script.sh
+    permissions: '0755'

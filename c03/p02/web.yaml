@@ -1,0 +1,46 @@
+#cloud-config
+hostname: web
+groups:
+  - umcloud
+users:
+  - name: ubuntu
+    shell: /bin/bash
+    sudo: ['ALL=(ALL) NOPASSWD:ALL']
+    ssh-import-id: [jjo, navarrow]
+    lock_passwd: true
+
+  - name: umcloud
+    shell: /bin/bash
+    sudo: ['ALL=(ALL) NOPASSWD:ALL']
+    ssh-import-id: [jjo, navarrow]
+    primary-group: umcloud
+    lock_passwd: true
+
+write_files:
+  - content: |
+        auto ens3:0
+        iface ens3:0 inet static
+        address 192.168.122.9
+        netmask 255.255.255.0
+        gateway 192.168.122.1
+        dns-nameservers 8.8.8.8
+    path: /etc/network/interfaces.d/ens3.cfg
+
+chpasswd:
+  list: |
+    umcloud:umcloud
+  expire: False
+packages:
+  - apache2
+  - phpmyadmin
+
+runcmd:
+  - [ ifdown, -a ]
+  - [ ifup, -a ]
+  - [ resolvconf, -u ]
+
+# Reboot, to apply networking changes
+power_state:
+    mode: reboot
+    message: Bye Bye
+    timeout: 30
