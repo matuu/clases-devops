@@ -1,0 +1,11 @@
+#cloud-config
+#
+manage_etc_hosts: true
+# apt_proxy: http://172.16.16.1:8000/
+
+users:
+  - name: TU_USUARIO_EN_LINUX
+    shell: /bin/bash
+    groups: admin,adm,sudo
+    sudo: ALL=(ALL) NOPASSWD:ALL
+    ssh-import-id: [TU_USER_EN_LAUNCHPAD]
