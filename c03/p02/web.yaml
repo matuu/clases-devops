@@ -1,5 +1,8 @@
 #cloud-config
 hostname: web
+manage_etc_hosts: true
+# apt_proxy: http://172.16.16.1:8000/
+
 groups:
   - umcloud
 users:
@@ -20,6 +23,7 @@ write_files:
   - content: |
         auto ens3:0
         iface ens3:0 inet static
+        mtu 1450
         address 192.168.122.9
         netmask 255.255.255.0
         gateway 192.168.122.1

@@ -1,5 +1,8 @@
 #cloud-config
 hostname: tercervm
+manage_etc_hosts: true
+# apt_proxy: http://172.16.16.1:8000/
+
 groups:
   - umcloud
 users:
