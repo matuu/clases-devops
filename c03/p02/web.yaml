@@ -43,7 +43,7 @@ runcmd:
   - [ ifup, -a ]
   - [ resolvconf, -u ]
   - [ cd, /usr/local/src/ ]
-  - [ wget, https://github.com/umcloud/clases-devops/raw/master/c03/p02/web-deploy.sh ]
+  - [ wget, 'https://github.com/umcloud/clases-devops/raw/master/c03/p02/web-deploy.sh' ]
   - [ chmod, 755, /usr/local/src/web-deploy.sh ]
   - [ /usr/local/src/web-deploy.sh ]
 

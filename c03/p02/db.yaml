@@ -45,7 +45,7 @@ runcmd:
   - [ ifup, -a ]
   - [ resolvconf, -u ]
   - [ cd, /usr/local/src/ ]
-  - [ wget, https://github.com/umcloud/clases-devops/raw/master/c03/p02/db-deploy.sh ]
+  - [ wget, 'https://github.com/umcloud/clases-devops/raw/master/c03/p02/db-deploy.sh' ]
   - [ chmod, 755, /usr/local/src/db-deploy.sh ]
   - [ /usr/local/src/db-deploy.sh ]
 
