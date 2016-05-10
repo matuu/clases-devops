@@ -3,6 +3,8 @@ echo "# Optimizacion: proxy local"
 echo "export http_proxy=http://172.16.16.1:8000/"
 echo ""
 
+export http_proxy=http://172.16.16.1:8000/
+
 echo "# Instalación"
 echo "sudo env http_proxy=$http_proxy apt-get install uvtool #Desloguearse/Loguear para que tome GID"
 echo ""
@@ -40,3 +42,6 @@ echo ""
 echo "# Creando con parámetros"
 echo "uvt-kvm create segundavm release=xenial arch=amd64 --bridge virbr0 --memory 512 --disk 10 --memory 1024"
 echo ""
+
+echo "# MSS problems"
+echo "iptables -t mangle -A FORWARD -p tcp --tcp-flags SYN,RST SYN -j TCPMSS --set-mss 1400"
