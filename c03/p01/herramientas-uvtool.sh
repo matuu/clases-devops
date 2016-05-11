@@ -45,3 +45,7 @@ echo ""
 
 echo "# MSS problems"
 echo "iptables -t mangle -A FORWARD -p tcp --tcp-flags SYN,RST SYN -j TCPMSS --set-mss 1400"
+echo ""
+
+echo "# Sshutle para acceder a la red en las instancias [http://sshuttle.readthedocs.io/en/stable/]"
+echo "sshuttle 192.168.122.0/24 -r ubuntu@IP_INSTANCIA"
