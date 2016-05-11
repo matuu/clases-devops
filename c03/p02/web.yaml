@@ -1,7 +1,7 @@
 #cloud-config
 hostname: web
 manage_etc_hosts: true
-# apt_proxy: http://172.16.16.1:8000/
+apt_proxy: http://172.16.16.1:8000/
 
 groups:
   - umcloud
