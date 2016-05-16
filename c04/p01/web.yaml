@@ -1,0 +1,77 @@
+#cloud-config
+hostname: web
+manage_etc_hosts: true
+apt_proxy: http://172.16.16.1:8000/
+http_proxy: http://172.16.16.1:8000/
+_foo: &SSH_KEY "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC5eevkMmUlTxruhespUgHPGO3y3db7hLlq0IPu2WmTf+8YW9MM8/RddGvf2Pwshe7uIz1RhALBluuEXyZXM4ZL4ePiktxUFRKy9a/BnphR/RsAxKQ+HRAAwXheEJ6q3vmjlIMG5GOJhn+br6lMtr/ojDwHrfC1NrSFr/jZkRR5K218Yt33Y7AzZm+ahVkZUHIbpQs4XehBThnMl2enxfum00pGChQJIlDL2jM4ZLMGTvbXe3Zv+70osS0+UDpO8di2CLxi42sDoquNcCvd4KLpG5droqJwf4WRmhleLvkW0H5rP1diUbO5Btu3nJMZVlBZLCSLeI5QKsaN81YwHJsf jujumanage@um-cloud-maas"
+_foo: &DEPLOY_SH |
+  #!/bin/bash
+  echo "*** INFO: BEGIN $0 $*"
+  # Resolvemos "db.local" a una dir IP
+  while :;do 
+     db_ip=$(avahi-resolve -4 -n db.local|awk '{ print $2 }')
+     [ -n "${db_ip}" ] && break
+     echo "*** INFO: Waiting for db.local to resolve ..."
+     sleep 10
+  done
+  echo "*** INFO: db_ip=${db_ip}"
+
+  # Instalamos web app
+  cd /var/www/html
+  rm -rf php-mysql
+  git clone https://github.com/IBM-Bluemix/php-mysql.git
+  cd php-mysql
+  
+  # Ajustamos la app para que se conecte a la DB
+  sed -i.bak 's/mysql_server_name = "127.0.0.1:3306"/mysql_server_name = "'${db_ip?}':3306"/g' db.php
+  sed -i.bak 's/mysql_username = "root"/mysql_username = "webapp"/g' db.php
+  sed -i.bak 's/mysql_password = ""/mysql_password = "supersecretisimo"/g' db.php
+  sed -i.bak 's/mysql_database = "test"/mysql_database = "webapp_db"/g' db.php
+  service apache2 start
+
+  # Mostramos resultado
+  my_ip=$(ip r get 1 | sed -nr 's/.*src (\S+).*/\1/p')
+  echo "*** INFO: READY, browse:"
+  echo "    http://${my_ip?}/php-mysql"
+  echo "*** INFO: END $0 $*"
+
+bootcmd:
+ - cloud-init-per once pkgs_install apt-get install -qy avahi-daemon avahi-utils
+
+groups:
+  - umcloud
+users:
+  - name: ubuntu
+    shell: /bin/bash
+    sudo: ['ALL=(ALL) NOPASSWD:ALL']
+    ssh-authorized-keys:
+      - *SSH_KEY
+    ssh-import-id: [jjo, navarrow]
+    lock_passwd: true
+
+  - name: umcloud
+    shell: /bin/bash
+    sudo: ['ALL=(ALL) NOPASSWD:ALL']
+    ssh-authorized-keys:
+      - *SSH_KEY
+    ssh-import-id: [jjo, navarrow]
+    primary-group: umcloud
+    lock_passwd: true
+
+write_files:
+  - content: *DEPLOY_SH
+    path: /usr/local/src/deploy.sh
+    permissions: '0755'
+
+chpasswd:
+  list: |
+    umcloud:umcloud
+  expire: False
+packages:
+  - avahi-daemon
+  - avahi-utils
+  - apache2
+  - phpmyadmin
+
+runcmd:
+  - [ /usr/local/src/deploy.sh ]
