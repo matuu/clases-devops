@@ -32,11 +32,18 @@ users:
     lock_passwd: true
 # From vim ->
 # :r !./csv-to-tenants.sh
+  - { name: jjo, gecos: "juan.ciarlante@um.edu.ar", ssh-import-id: ["jjo"], shell: /bin/bash, primary-group: umcloud }
+  - { name: navarrow, gecos: "diego.navarro@um.edu.ar", ssh-import-id: ["navarrow"], shell: /bin/bash, primary-group: umcloud }
 
 write_files:
   - content: *DEPLOY_SH
     path: /usr/local/src/deploy.sh
     permissions: '0755'
+
+# Optimization speed up apt by shortcutting fsync() calls/etc
+apt_get_wrapper:
+  command: eatmydata
+  enabled: True
 
 packages:
   - curl
@@ -45,8 +52,8 @@ packages:
   - tmux
   - fping
   - git-core
-#  - python3-keystoneclient
-#  - python3-novaclient
+  - python3-keystoneclient
+  - python3-novaclient
 #  - python3-neutronclient
 #  - python3-glanceclient
 #  - python3-swiftclient
