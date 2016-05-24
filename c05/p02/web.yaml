@@ -14,7 +14,7 @@ _foo: &DEPLOY_SH |
   cd php-mysql
   
   # Ajustamos la app para que se conecte a la DB
-  sed -i.bak 's/mysql_server_name = "127.0.0.1:3306"/mysql_server_name = "db-navarrow.node.umcloud:3306"/g' db.php
+  sed -i.bak 's/mysql_server_name = "127.0.0.1:3306"/mysql_server_name = "db-EDITAR_USUARIO.node.umcloud:3306"/g' db.php
   sed -i.bak 's/mysql_username = "root"/mysql_username = "webapp"/g' db.php
   sed -i.bak 's/mysql_password = ""/mysql_password = "supersecretisimo"/g' db.php
   sed -i.bak 's/mysql_database = "test"/mysql_database = "webapp_db"/g' db.php
@@ -36,8 +36,6 @@ _foo: &DEPLOY_SH |
   echo "*** INFO: READY, browse:"
   echo "    http://${my_ip?}/php-mysql"
   echo "*** INFO: END $0 $*"
-  echo "/usr/local/src/boot_ip.sh" >> /etc/rc.local
-
 _foo: &CONSUL_CONF |
   {
     "server": false,
@@ -49,7 +47,8 @@ _foo: &CONSUL_CONF |
     "enable_syslog": true,
     "start_join": ["192.168.3.130"]
   }
-_foo: &CONSUL_SERVICE | 
+
+_foo: &CONSUL_SERVICE |
   {
     "service":
       {
@@ -107,7 +106,6 @@ _foo: &CONSUL_INIT |
   esac
   exit 0
 
-  
 groups:
   - umcloud
 users:

@@ -27,6 +27,7 @@ _foo: &DEPLOY_SH |
   mkdir -p /etc/consul.d
   mkdir /var/consul
   chown consul:consul /var/consul
+  echo "*** INFO: END $0 $*"
 
 _foo: &CONSUL_CONF |
   {
@@ -131,7 +132,6 @@ write_files:
   - content: *CONSUL_INIT
     path: /etc/init.d/consul
     permissions: '0755'
-
 
 chpasswd:
   list: |
