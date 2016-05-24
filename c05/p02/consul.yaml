@@ -13,7 +13,7 @@ _foo: &CONSUL_CONF |
     "ui_dir": "/home/consul/",
     "encrypt": "GIMbRTkH/rLwqjOWrMzrcw==",
     "log_level": "INFO",
-    "domain": "umcloud",
+    "domain": "cloud.um.edu.ar",
     "enable_syslog": true,
     "recursors": ["192.168.3.252","192.168.3.251"],
     "ports": { "dns":53 }
