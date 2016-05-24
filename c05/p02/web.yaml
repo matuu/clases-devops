@@ -1,5 +1,5 @@
 #cloud-config
-hostname: web-navarrow
+hostname: web-EDITAR_USUARIO
 manage_etc_hosts: true
 apt_proxy: http://172.16.16.1:8000/
 http_proxy: http://172.16.16.1:8000/
@@ -22,14 +22,11 @@ _foo: &DEPLOY_SH |
 
   #Descargamos consul
   cd /tmp
-  wget https://releases.hashicorp.com/consul/0.6.4/consul_0.6.4_linux_amd64.zip
+  wget http://192.168.3.251/consul/0.6.4/consul_0.6.4_linux_amd64.zip
   unzip *.zip
   cp consul /usr/local/sbin
   #creamos users dirs para consul
   adduser consul
-  cd /home/consul
-  wget https://releases.hashicorp.com/consul/0.6.4/consul_0.6.4_web_ui.zip
-  unzip *zip
   mkdir -p /etc/consul.d
   mkdir /var/consul
   chown consul:consul /var/consul
