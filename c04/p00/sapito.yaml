@@ -54,6 +54,7 @@ packages:
   - git-core
   - python3-keystoneclient
   - python3-novaclient
+  - jq
 #  - python3-neutronclient
 #  - python3-glanceclient
 #  - python3-swiftclient
