@@ -26,11 +26,9 @@ _foo: &DEPLOY_SH |
   unzip *.zip
   cp consul /usr/local/sbin
   #creamos users dirs para consul
+  useradd -d /var/consul -m consul
   adduser consul
   mkdir -p /etc/consul.d
-  mkdir /var/consul
-  chown consul:consul /var/consul
-
   # Mostramos resultado
   my_ip=$(ip r get 1 | sed -nr 's/.*src (\S+).*/\1/p')
   echo "*** INFO: READY, browse:"
@@ -140,10 +138,18 @@ write_files:
     path: /etc/init.d/consul
     permissions: '0755'
 
-chpasswd:
-  list: |
-    umcloud:umcloud
-  expire: False
+### Deshabilitado por seguridad
+#chpasswd:
+#  list: |
+#    umcloud:umcloud
+#  expire: False
+#
+
+# Optimization speed up apt by shortcutting fsync() calls/etc
+apt_get_wrapper:
+  command: eatmydata
+  enabled: True
+
 packages:
   - unzip
   - apache2
@@ -154,3 +160,5 @@ runcmd:
   - [ cd, /etc/init.d/ ]
   - [ update-rc.d, consul, defaults ]
   - [ service, consul, start ]
+
+# vim: si et sw=2 ts=2

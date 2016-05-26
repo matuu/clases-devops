@@ -1,6 +1,6 @@
 #!/bin/bash
 set -e
-name=c05-${USER}-web
+name=c06-${USER}-web
 cloud_init_file="web.yaml"
 grep -q EDITAR_USUARIO ${cloud_init_file} && { echo "ERROR: tenes que editar EDITAR_USUARIO con tu nombre en ${cloud_init_file}" ; exit 1; }
 image=$(nova image-list | awk '/xenial.*disk1.img/{ print $4 }')
