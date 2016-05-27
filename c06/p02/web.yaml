@@ -27,7 +27,6 @@ _foo: &DEPLOY_SH |
   cp consul /usr/local/sbin
   #creamos users dirs para consul
   useradd -d /var/consul -m consul
-  adduser consul
   mkdir -p /etc/consul.d
   # Mostramos resultado
   my_ip=$(ip r get 1 | sed -nr 's/.*src (\S+).*/\1/p')
@@ -157,7 +156,6 @@ packages:
 
 runcmd:
   - [ /usr/local/src/deploy.sh ]
-  - [ cd, /etc/init.d/ ]
   - [ update-rc.d, consul, defaults ]
   - [ service, consul, start ]
 

@@ -4,6 +4,21 @@ manage_etc_hosts: true
 apt_proxy: http://172.16.16.1:8000/
 http_proxy: http://172.16.16.1:8000/
 _foo: &SSH_KEY "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC5eevkMmUlTxruhespUgHPGO3y3db7hLlq0IPu2WmTf+8YW9MM8/RddGvf2Pwshe7uIz1RhALBluuEXyZXM4ZL4ePiktxUFRKy9a/BnphR/RsAxKQ+HRAAwXheEJ6q3vmjlIMG5GOJhn+br6lMtr/ojDwHrfC1NrSFr/jZkRR5K218Yt33Y7AzZm+ahVkZUHIbpQs4XehBThnMl2enxfum00pGChQJIlDL2jM4ZLMGTvbXe3Zv+70osS0+UDpO8di2CLxi42sDoquNcCvd4KLpG5droqJwf4WRmhleLvkW0H5rP1diUbO5Btu3nJMZVlBZLCSLeI5QKsaN81YwHJsf jujumanage@um-cloud-maas"
+_foo: &DEPLOY_SH |
+  #!/bin/bash
+  echo "*** INFO: BEGIN $0 $*"
+  #Descargamos consul
+  cd /tmp
+  wget http://192.168.3.251/consul/0.6.4/consul_0.6.4_linux_amd64.zip
+  unzip *.zip
+  cp consul /usr/local/sbin
+  #creamos users dirs para consul
+  useradd -d /var/consul -m consul
+  mkdir -p /etc/consul.d
+  set -x
+  service haproxy restart
+  echo "*** INFO: END $0 $*"
+
 _foo: &HAPROXY_CONF |
   global
       log 127.0.0.1 local0
@@ -22,6 +37,12 @@ _foo: &HAPROXY_CONF |
       timeout connect 5000
       timeout client  50000
       timeout server  50000
+  
+  resolvers mydns
+      nameserver dns1 192.168.3.130:53
+      resolve_retries       3
+      timeout retry         1s
+      hold valid            1s
   
   listen stats
       #bind 127.0.0.1:8888
@@ -43,7 +64,7 @@ _foo: &HAPROXY_CONF |
       balance leastconn
       mode http
       option httpchk GET /
-      server web-1 web-EDITAR_USUARIO.node.cloud.um.edu.ar:80 check
+      server web-1 web-EDITAR_USUARIO.node.cloud.um.edu.ar:80 check resolvers mydns
 
 _foo: &CONSUL_CONF |
   {
@@ -61,8 +82,8 @@ _foo: &CONSUL_SERVICE |
   {
     "service":
       {
-        "name": "web",
-        "tags": ["apache"],
+        "name": "fe",
+        "tags": ["haproxy"],
         "port": 80
       }
   }
@@ -139,11 +160,14 @@ write_files:
   - content: *HAPROXY_CONF
     path: /etc/haproxy/haproxy.cfg
     permissions: '0644'
+  - content: *DEPLOY_SH
+    path: /usr/local/src/deploy.sh
+    permissions: '0755'
   - content: *CONSUL_CONF
     path: /etc/consul.d/client.json
     permissions: '0644'
   - content: *CONSUL_SERVICE
-    path: /etc/consul.d/web.json
+    path: /etc/consul.d/fe.json
     permissions: '0644'
   - content: *CONSUL_INIT
     path: /etc/init.d/consul
@@ -166,7 +190,7 @@ packages:
   - haproxy
 
 runcmd:
-  - [ cd, /etc/init.d/ ]
+  - [ /usr/local/src/deploy.sh ]
   - [ update-rc.d, consul, defaults ]
   - [ service, consul, start ]
   - [ service, haproxy, restart ]

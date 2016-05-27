@@ -171,7 +171,6 @@ packages:
 
 runcmd:
   - [ /usr/local/src/deploy.sh ]
-  - [ cd, /etc/init.d/ ]
   - [ update-rc.d, consul, defaults ]
   - [ service, consul, start ]
 
