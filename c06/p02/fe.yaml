@@ -1,5 +1,4 @@
 #cloud-config
-hostname: fe-EDITAR_USUARIO
 manage_etc_hosts: true
 apt_proxy: http://172.16.16.1:8000/
 http_proxy: http://172.16.16.1:8000/
@@ -64,7 +63,7 @@ _foo: &HAPROXY_CONF |
       balance leastconn
       mode http
       option httpchk GET /
-      server web-1 web-EDITAR_USUARIO.node.cloud.um.edu.ar:80 check resolvers mydns
+      server web-1 web-jjo.node.cloud.um.edu.ar:80 check resolvers mydns
 
 _foo: &CONSUL_CONF |
   {

@@ -1,5 +1,4 @@
 #cloud-config
-hostname: db-EDITAR_USUARIO
 manage_etc_hosts: true
 apt_proxy: http://172.16.16.1:8000/
 http_proxy: http://172.16.16.1:8000/

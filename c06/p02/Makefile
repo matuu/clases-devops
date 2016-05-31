@@ -1,16 +1,18 @@
 # github.com/umcloud/clases-devops/c06/p02/Makefile
 all:
 
-deploy: edit-user
-	@test -n "$(vol_id)" || { echo "*** use:\n\nmake $@ vol_id=UUID\n"; exit 1;}
-	@nova list|grep -q -- '-db\b' && exit 0; ./db-create.sh $(vol_id); sleep $$((RANDOM%5))
-	@nova list|grep -q -- '-web\b' && exit 0; ./web-create.sh; sleep $$((RANDOM%5))
-	@nova list|grep -q -- '-fe\b' && exit 0; ./fe-create.sh; sleep $$((RANDOM%5))
+deploy: edit-user deploy-db-with-vol_id deploy-web deploy-fe
+destroy: destroy-db destroy-web destroy-fe unedit-user
 
-destroy: unedit-user
-	@nova list|awk '/-db\>/  { print $$2 }' | xargs -rtl1 nova delete
-	@nova list|awk '/-web\>/ { print $$2 }' | xargs -rtl1 nova delete
-	@nova list|awk '/-fe\>/  { print $$2 }' | xargs -rtl1 nova delete
+deploy-%:
+	nova list|grep -q -w -- '$(*)' && exit 0; ./nova-boot.sh $(*)-$(USER) $(*).yaml $(extra); sleep $$((RANDOM%5))
+
+deploy-db-with-vol_id:
+	@test -n "$(vol_id)" || { echo "*** use:\n\nmake deploy vol_id=UUID\n"; exit 1;}
+	make deploy-db extra="--block-device-mapping vdb=$(vol_id):::0"
+
+destroy-%:
+	@nova list|awk '/\<$(*)\>/ { print $$2 }' | xargs -rtl1 nova delete
 
 verify:
 	@echo "*** WEB:"
@@ -18,14 +20,11 @@ verify:
 	@echo "*** FE:"
 	curl -m2 -sL http://fe-$(USER).node.cloud.um.edu.ar/php-mysql | grep Sample.App && echo PASS. || echo FAIL.
 
-console-log:
-	@echo "*** DB:"
-	@nova list|awk '/-db\>/  { print $$2 }' | xargs -rtl1 nova console-log --length 10 
-	@echo "*** WEB:"
-	@nova list|awk '/-web\>/ { print $$2 }' | xargs -rtl1 nova console-log --length 10
-	@echo "*** FE:"
-	@nova list|awk '/-fe\>/  { print $$2 }' | xargs -rtl1 nova console-log --length 10
-	
+console-log: console-log-db console-log-web console-log-fe
+
+console-log-%:
+	@echo "*** $(*) ***:"
+	@nova list|awk '/\<$(*)\>/  { print $$2 }' | xargs -rtl1 nova console-log --length 10 
 
 edit-user:
 	sed -i "s/-EDITAR_USUARIO/-$(USER)/" *.yaml
