@@ -1,5 +1,5 @@
 #!/bin/bash
-vol_id=${1:?missing volume_uuid (create with eg.: openstack volume create --description db-vol --size 10)}
+vol_id=${1:?missing volume_uuid (create with eg.: openstack volume create --size 10 db-vol)}
 shift
 set -e
 name=c06-${USER}-db
