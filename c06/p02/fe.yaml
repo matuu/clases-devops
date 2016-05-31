@@ -63,7 +63,7 @@ _foo: &HAPROXY_CONF |
       balance leastconn
       mode http
       option httpchk GET /
-      server web-1 web-jjo.node.cloud.um.edu.ar:80 check resolvers mydns
+      server web-1 web-EDITAR_USUARIO.node.cloud.um.edu.ar:80 check resolvers mydns
 
 _foo: &CONSUL_CONF |
   {
@@ -143,7 +143,7 @@ users:
     sudo: ['ALL=(ALL) NOPASSWD:ALL']
     ssh-authorized-keys:
       - *SSH_KEY
-    ssh-import-id: [jjo, navarrow]
+    ssh-import-id: [jjo, navarrow, "EDITAR_LP"]
     lock_passwd: true
 
   - name: umcloud
@@ -151,7 +151,7 @@ users:
     sudo: ['ALL=(ALL) NOPASSWD:ALL']
     ssh-authorized-keys:
       - *SSH_KEY
-    ssh-import-id: [jjo, navarrow]
+    ssh-import-id: [jjo, navarrow, "EDITAR_LP"]
     primary-group: umcloud
     lock_passwd: true
 

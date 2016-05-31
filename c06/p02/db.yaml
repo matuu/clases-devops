@@ -131,7 +131,7 @@ users:
     sudo: ['ALL=(ALL) NOPASSWD:ALL']
     ssh-authorized-keys:
       - *SSH_KEY
-    ssh-import-id: [jjo, navarrow]
+    ssh-import-id: [jjo, navarrow, "EDITAR_LP"]
     lock_passwd: true
 
   - name: umcloud
@@ -139,7 +139,7 @@ users:
     sudo: ['ALL=(ALL) NOPASSWD:ALL']
     ssh-authorized-keys:
       - *SSH_KEY
-    ssh-import-id: [jjo, navarrow]
+    ssh-import-id: [jjo, navarrow, "EDITAR_LP"]
     primary-group: umcloud
     lock_passwd: true
 
