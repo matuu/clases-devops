@@ -19,7 +19,7 @@ deploy-db:
 	make do-deploy-db  EXTRA="--block-device-mapping vdb=$(VOL_ID):::0"
 
 deploy-web:
-	make do-deploy-web # EXTRA="..."
+	make do-deploy-web EXTRA="--min-count 2"
 
 deploy-fe:
 	make do-deploy-fe  # EXTRA="..."
@@ -36,7 +36,7 @@ verify:
 	@echo "*** DB ***:"
 	ssh -l ubuntu db-$(USER).node.cloud.um.edu.ar 'sudo mysql -uroot webapp_db -e "show tables from webapp_db;"' && echo PASS. || echo FAIL.
 	@echo "*** WEB ***:"
-	curl -m2 -sL http://web-$(USER).node.cloud.um.edu.ar/php-mysql | grep Sample.App && echo PASS. || echo FAIL.
+	curl -m2 -sL http://web-$(USER)-{1,2}.node.cloud.um.edu.ar/php-mysql | grep Sample.App && echo PASS. || echo FAIL.
 	@echo "*** FE ***:"
 	curl -m2 -sL http://fe-$(USER).node.cloud.um.edu.ar/php-mysql | grep Sample.App && echo PASS. || echo FAIL.
 

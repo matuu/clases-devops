@@ -63,7 +63,8 @@ _foo: &HAPROXY_CONF |
       balance leastconn
       mode http
       option httpchk GET /
-      server webapp web-EDITAR_USUARIO.node.cloud.um.edu.ar:80 check resolvers mydns
+      server webapp-1 web-EDITAR_USUARIO-1.node.cloud.um.edu.ar:80 check resolvers mydns
+      server webapp-2 web-EDITAR_USUARIO-2.node.cloud.um.edu.ar:80 check resolvers mydns
 
 _foo: &CONSUL_CONF |
   {
