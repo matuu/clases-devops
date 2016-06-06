@@ -80,6 +80,17 @@ snap-destroy-%:
 	openstack snapshot list
 	openstack volume list
 
+yaml-verify: $(patsubst %.yaml, %.yaml.chk, $(wildcard *.yaml))
+
+yaml-lint: $(patsubst %.yaml, %.yaml.lint, $(wildcard *.yaml))
+
+%.yaml.chk: %.yaml
+	python -c 'import yaml,sys;yaml.load(sys.stdin)' < $^
+
+%.yaml.lint: %.yaml
+	-yamllint -d "{extends: relaxed, rules: {line-length: {max: 120}}}" $^
+
+
 ifndef ENV
 $(error Falta: export ENV={prod,stag} o make ENV={prod,stag} $(MAKECMDGOALS))
 endif
