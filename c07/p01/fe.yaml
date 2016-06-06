@@ -16,7 +16,7 @@ _foo: &DEPLOY_SH |
   mkdir -p /etc/consul.d
   set -x
   # truchisimo pero bueh, ver http://www.serverphorums.com/read.php?10,1248602
-  sleep 60
+  sleep 120
   service haproxy restart
   echo "*** INFO: END $0 $*"
 
@@ -63,8 +63,8 @@ _foo: &HAPROXY_CONF |
       balance leastconn
       mode http
       option httpchk GET /
-      server webapp-1 web-EDITAR_USUARIO-1.node.cloud.um.edu.ar:80 check resolvers mydns
-      server webapp-2 web-EDITAR_USUARIO-2.node.cloud.um.edu.ar:80 check resolvers mydns
+      server webapp-1 EDITAR_ENV-EDITAR_USUARIO-web-1.node.cloud.um.edu.ar:80 check resolvers mydns
+      server webapp-2 EDITAR_ENV-EDITAR_USUARIO-web-2.node.cloud.um.edu.ar:80 check resolvers mydns
 
 _foo: &CONSUL_CONF |
   {
