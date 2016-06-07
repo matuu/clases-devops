@@ -1,11 +1,14 @@
 # github.com/umcloud/clases-devops/c06/p02/Makefile
 help:
 	@echo "Use:"
-	@echo "make deploy VOL_ID=UUID   # UUID: volume id"
-	@echo "make console-log"
-	@echo "make verify"
+	@echo "make deploy      ENV=prod"
+	@echo "make console-log ENV=prod"
+	@echo "make verify      ENV=prod"
 	@echo
-	@echo "make destroy"
+	@echo "make destroy     ENV=prod"
+	@echo
+	@echo "make snap-create ENV=stag"
+	@echo "make deploy      ENV=stag"
 
 # Validacion y seteo de ENV movido al final para permitir
 # bash auto-completion
@@ -91,7 +94,10 @@ yaml-lint: $(patsubst %.yaml, %.yaml.lint, $(wildcard *.yaml))
 	-yamllint -d "{extends: relaxed, rules: {line-length: {max: 120}}}" $^
 
 
+ifneq ($(MAKECMDGOALS),)
 ifndef ENV
 $(error Falta: export ENV={prod,stag} o make ENV={prod,stag} $(MAKECMDGOALS))
 endif
+endif
+
 PREFIX:=$(ENV)-$(USER)
