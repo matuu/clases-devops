@@ -23,7 +23,7 @@ spec:
           ports:
             - containerPort: 3306
         - name: myapp
-          image: registry.cloud.um.edu.ar:443/myapp-@EDITAR_USUARIO@:latest
+          image: @EDITAR_REGISTRY@/myapp-@EDITAR_USUARIO@:latest
           imagePullPolicy: Always
           env:
             - name: MYSQL_ROOT_PASSWORD
