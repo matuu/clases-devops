@@ -1,2 +1,2 @@
-sed "s/@EDITAR_USUARIO@/${USER}/" myappsql-pod.tmpl.yaml > /tmp/myappsql-pod-${USER}.yaml
-kubectl create -f /tmp/myappsql-pod-${USER}.yaml
+sed "s/@EDITAR_USUARIO@/${USER}/" myappsql-rc.tmpl.yaml > /tmp/myappsql-rc-${USER}.yaml
+kubectl create -f /tmp/myappsql-rc-${USER}.yaml
