@@ -1,0 +1,51 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: myappsql-pod-@EDITAR_USUARIO@
+  labels:
+    user: @EDITAR_USUARIO@
+    app: myapp
+spec:
+  restartPolicy: Always
+  containers:
+    - name: mysql
+      image: mysql:5.5
+      env:
+        - name: MYSQL_ROOT_PASSWORD
+          value: f00b4r # [0]
+      ports:
+        - containerPort: 3306
+    - name: myapp
+      image: registry.cloud.um.edu.ar:443/myapp-@EDITAR_USUARIO@:latest
+      imagePullPolicy: Always
+      env:
+        - name: MYSQL_ROOT_PASSWORD
+          value: f00b4r # [0]
+      ports:
+        - containerPort: 80
+
+# [0]
+# con kubernetes mas nuevos, puede ser:
+#          valueFrom:
+#            secretKeyRef:
+#              name: my-secrets-store
+#              key: mypass
+#
+# , previamente ejecutando:
+#   $ kubectl create secret generic my-secrets-store --from-literal=mypass=f00b4r
+#
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: myappsql-svc-@EDITAR_USUARIO@
+spec:
+  ports:
+    -
+      port: 80
+      targetPort: 80
+  selector:
+    user: @EDITAR_USUARIO@
+    app: myapp
+
+# vim: si et sw=2 ts=2 syntax=yaml
