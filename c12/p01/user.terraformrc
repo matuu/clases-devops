@@ -1,0 +1,3 @@
+PATH=/usr/local/terraform/bin:/home/$USER/terraform:$PATH
+export TF_VAR_USER=$USER;
+export TF_VAR_PASS=$OS_PASSWORD;
