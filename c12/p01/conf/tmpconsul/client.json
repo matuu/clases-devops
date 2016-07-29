@@ -1,0 +1,11 @@
+{
+    "server": false,
+    "datacenter": "um-01",
+    "data_dir": "/var/consul",
+    "encrypt": "GIMbRTkH/rLwqjOWrMzrcw==",
+    "log_level": "INFO",
+    "domain": "cloud.um.edu.ar",
+    "enable_syslog": true,
+    "start_join": ["192.168.3.130"]
+  }
+
