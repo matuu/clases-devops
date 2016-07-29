@@ -1,9 +1,0 @@
-  {
-    "service":
-      {
-        "name": "web",
-        "tags": ["apache"],
-        "port": 80
-      }
-  }
-
