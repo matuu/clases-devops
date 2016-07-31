@@ -23,7 +23,7 @@ test -x $DAEMON || exit 0
 case "$1" in
   start)
         log_daemon_msg "Starting consul agent" "consul"
-        start_daemon -p $PIDFILE $DAEMON agent -config-dir /etc/consul.d -client 0.0.0.0
+        start_daemon -s -p $PIDFILE $DAEMON agent -config-dir /etc/consul.d -client 0.0.0.0
         log_end_msg $?
     ;;
   stop)

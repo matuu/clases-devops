@@ -13,8 +13,5 @@ export APT_XTRA=--option=Dpkg::options::=--force-unsafe-io
 apt-get $APT_XTRA -y update
 apt-get $APT_XTRA install -y mysql-server unzip
 
-#apt-get -y $APT_XTRA update
-
-#echo "mysql-server-5.7 mysql-server/root_password password  " | sudo debconf-set-selections
-#echo "mysql-server-5.7 mysql-server/root_password_again password " | sudo debconf-set-selections
+echo "*** INFO: END $0 $*"
 

@@ -50,9 +50,9 @@ resource "openstack_compute_secgroup_v2" "c12p01" {
 }
 
 # instancia de compute  para server web
-resource "openstack_compute_instance_v2" "web-c12p01" {
+resource "openstack_compute_instance_v2" "c12p01-web" {
   count = "${var.count}"
-  name            = "${format("web-${var.USER}-%02d", count.index+1)}"
+  name            = "${format("${var.USER}-%02d-web", count.index+1)}"
   image_name      = "${var.image}"
   flavor_name     = "${var.flavor}"
   key_pair        = "${var.USER}_key"
@@ -90,13 +90,10 @@ resource "openstack_compute_instance_v2" "web-c12p01" {
 
     provisioner "remote-exec" {
         inline = [
-#         "sudo cp /tmp/tmpconsul/consul  /etc/init.d/",
-#         "sudo chmod 0755 /etc/init.d/consul",
-#         "sudo cp /tmp/tmpconsul/*.json /etc/consul.d/",
-#         "sudo chmod 0644 /etc/consul.d/*",
           "sudo chmod +x /tmp/0*.sh",
           "sudo /tmp/00-bootstrapweb.sh",
-          "sudo /tmp/01-confweb.sh"
+          "sudo /tmp/01-confweb.sh ${var.USER}",
+	  "sudo /etc/init.d/consul restart"
         ]
      }
 
@@ -106,9 +103,9 @@ resource "openstack_compute_instance_v2" "web-c12p01" {
 
 
 # Instancia de DB
-resource "openstack_compute_instance_v2" "db-c12p01" {
+resource "openstack_compute_instance_v2" "c12p01-db" {
 
-  name            = "db-${var.USER}-01"
+  name            = "${var.USER}-01-db"
   image_name      = "${var.image}"
   flavor_name     = "${var.flavor}"
   key_pair        = "${var.USER}_key"
@@ -145,13 +142,10 @@ resource "openstack_compute_instance_v2" "db-c12p01" {
 
     provisioner "remote-exec" {
      	inline = [
-#         "sudo cp /tmp/tmpconsul/consul  /etc/init.d/",
-#	  "sudo chmod 0755 /etc/init.d/consul",
-#	  "sudo cp /tmp/tmpconsul/*.json /etc/consul.d/",
-#	  "sudo chmod 0644 /etc/consul.d/*",
 	  "sudo chmod +x /tmp/0*.sh",
 	  "sudo /tmp/00-bootstrapdb.sh",
-	  "sudo /tmp/01-confdb.sh"
+	  "sudo /tmp/01-confdb.sh",
+	  "sudo /etc/init.d/consul restart"
      	]
      }
 

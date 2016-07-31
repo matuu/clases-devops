@@ -7,14 +7,13 @@ echo  "Acquire::http::Proxy \"http://172.16.16.1:8000/\";i\nAcquire::https::Prox
 echo "*** configuramos usuarios"
 
 echo "*** instalamos paquetes:"
+
 export DEBIAN_FRONTEND=noninteractive
 export APT_XTRA=--option=Dpkg::options::=--force-unsafe-io
 
 apt-get $APT_XTRA -y update
 apt-get $APT_XTRA install -y apache2 unzip phpmyadmin
 
-#apt-get install -qy unzip apache2 
-#apt-get install -qqy phpmyadmin
 
 cat <<EOF > /var/www/html/index2.html
 <html>
@@ -24,3 +23,5 @@ cat <<EOF > /var/www/html/index2.html
 </html>
 EOF
 chown -R www-data:www-data /var/www/
+echo "*** INFO: END $0 $*"
+
