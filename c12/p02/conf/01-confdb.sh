@@ -19,7 +19,6 @@ cd /tmp
 # en vez de bajarlo lo traemos con el provisioner file de terraform
 #wget http://192.168.3.251/consul/0.6.4/consul_0.6.4_linux_amd64.zip
 curl  http://192.168.3.251/consul/0.6.4/consul_0.6.4_linux_amd64.zip > consul_0.6.4_linux_amd64.zip
-#mv /tmp/tmpconsul/*.zip /tmp/
 unzip *.zip
 cp consul /usr/local/sbin
 #creamos users dirs para consul

@@ -1,0 +1,16 @@
+digraph {
+	compound = "true"
+	newrank = "true"
+	subgraph "root" {
+		"[root] openstack_compute_instance_v2.c12p01-db" [label = "openstack_compute_instance_v2.c12p01-db", shape = "box"]
+		"[root] openstack_compute_instance_v2.c12p01-web" [label = "openstack_compute_instance_v2.c12p01-web", shape = "box"]
+		"[root] openstack_compute_secgroup_v2.c12p01" [label = "openstack_compute_secgroup_v2.c12p01", shape = "box"]
+		"[root] provider.openstack" [label = "provider.openstack", shape = "diamond"]
+		"[root] openstack_compute_instance_v2.c12p01-db" -> "[root] openstack_compute_secgroup_v2.c12p01"
+		"[root] openstack_compute_instance_v2.c12p01-db" -> "[root] provider.openstack"
+		"[root] openstack_compute_instance_v2.c12p01-web" -> "[root] openstack_compute_secgroup_v2.c12p01"
+		"[root] openstack_compute_instance_v2.c12p01-web" -> "[root] provider.openstack"
+		"[root] openstack_compute_secgroup_v2.c12p01" -> "[root] provider.openstack"
+	}
+}
+

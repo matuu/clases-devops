@@ -9,10 +9,15 @@ provider "openstack" {
   #    auth_url  = $OS_AUTH_URL
 }
 
+# Configure the Consul provider
+provider "consul" {
+  address    = "consul.cloud.um.edu.ar:8500"
+  datacenter = "um-01"
+}
 
 # Security Group para poder exponer los servicios
-resource "openstack_compute_secgroup_v2" "c12p01" {
-  name        = "c12p01-${var.USER}"
+resource "openstack_compute_secgroup_v2" "c12p02" {
+  name        = "c12p02-${var.USER}"
   description = "Security group para las instancias de Terraform"
 
   rule {
@@ -45,13 +50,13 @@ resource "openstack_compute_secgroup_v2" "c12p01" {
 }
 
 # instancia de compute  para server web
-resource "openstack_compute_instance_v2" "c12p01-web" {
+resource "openstack_compute_instance_v2" "c12p02-web" {
   count = "${var.count}"
   name            = "${format("${var.USER}-%02d-web", count.index+1)}"
   image_name      = "${var.image}"
   flavor_name     = "${var.flavor}"
   key_pair        = "${var.USER_KEY}"
-  security_groups = ["${openstack_compute_secgroup_v2.c12p01.name}"]
+  security_groups = ["${openstack_compute_secgroup_v2.c12p02.name}"]
 
   #  floating_ip = "${openstack_compute_floatingip_v2.terraform.address}"
 
@@ -66,7 +71,7 @@ resource "openstack_compute_instance_v2" "c12p01-web" {
   }
 
 
- # user_data = "${file("conf/00-bootstrapweb.sh")}"
+ #  user_data = "${file("conf/web.yaml")}"
 
     provisioner "file" {
          source = "conf/00-bootstrapweb.sh"
@@ -86,7 +91,7 @@ resource "openstack_compute_instance_v2" "c12p01-web" {
     provisioner "remote-exec" {
         inline = [
           "sudo chmod +x /tmp/0*.sh",
-	  "sudo /tmp/00-bootstrapweb.sh",
+          "sudo /tmp/00-bootstrapweb.sh",
           "sudo /tmp/01-confweb.sh ${var.USER}",
 	  "sudo /etc/init.d/consul restart"
         ]
@@ -98,13 +103,13 @@ resource "openstack_compute_instance_v2" "c12p01-web" {
 
 
 # Instancia de DB
-resource "openstack_compute_instance_v2" "c12p01-db" {
+resource "openstack_compute_instance_v2" "c12p02-db" {
 
   name            = "${var.USER}-01-db"
   image_name      = "${var.image}"
   flavor_name     = "${var.flavor}"
   key_pair        = "${var.USER_KEY}"
-  security_groups = ["${openstack_compute_secgroup_v2.c12p01.name}"]
+  security_groups = ["${openstack_compute_secgroup_v2.c12p02.name}"]
 
   #  floating_ip = "${openstack_compute_floatingip_v2.terraform.address}"
 
