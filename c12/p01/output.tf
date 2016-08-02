@@ -1,12 +1,12 @@
 
 
-#output "address" {
+output "IP_externa" {
 
 
-#    value = "${openstack_networking_port_v2.port_1.address}"
+  #  value = "${openstack_networking_port_v2.port_1.address}"
+     value = "${openstack_compute_floatingip_v2.c12p01.address}"
 
-
-#}
+}
 
 output "Name_web" { value = "${openstack_compute_instance_v2.c12p01-web.name}" }
 
