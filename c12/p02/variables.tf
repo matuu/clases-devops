@@ -18,7 +18,5 @@ variable "PASS" {}
 variable "USER_KEY" {}
 
 variable "count" {
-  default = 2
+  default = 1
 }
-
-

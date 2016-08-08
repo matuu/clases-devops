@@ -10,9 +10,9 @@ provider "openstack" {
 }
 
 # Descomentar para ip extena
-#resource "openstack_compute_floatingip_v2" "c12p01" {
-#  pool = "ext_net"
-#}
+resource "openstack_compute_floatingip_v2" "c12p01" {
+  pool = "ext_net"
+}
 
 # Security Group para poder exponer los servicios
 resource "openstack_compute_secgroup_v2" "c12p01" {
@@ -58,7 +58,7 @@ resource "openstack_compute_instance_v2" "c12p01-web" {
   security_groups = ["${openstack_compute_secgroup_v2.c12p01.name}"]
 
  # Descomentar para ip externa
- # floating_ip = "${openstack_compute_floatingip_v2.c12p01.address}"
+  floating_ip = "${openstack_compute_floatingip_v2.c12p01.address}"
 
 # Usamos la red ya configurada en OPENSTACK UMCLOUD  
   network {

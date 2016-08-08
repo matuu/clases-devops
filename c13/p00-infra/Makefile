@@ -6,8 +6,8 @@ help:
 	@echo "CLUSTER"
 	@echo "make list"
 	@echo "make connect CLUSTER=name"
-	@echo "make create CLUSTER=name [NODES=number] [MACHINE_TYPE=machine_type]"
-	@echo "make delete CLUSTER=name"
+	@echo "make create  CLUSTER=name [NODES=number] [MACHINE_TYPE=machine_type]"
+	@echo "make delete  CLUSTER=name"
 	@echo ""
 	@echo "SQL"
 	@echo "make list-sql"
@@ -58,10 +58,14 @@ list-deployments: connect
 list-events: connect
 	kubectl get events
 
+ifndef CLUSTER
+CLUSTER=${USER}
+endif
+
 ifndef NODES
 NODES=3
 endif
 ifndef MACHINE_TYPE
+#MACHINE_TYPE=f1-micro
 MACHINE_TYPE=n1-standard-1
-MACHINE_TYPE=f1-micro
 endif
