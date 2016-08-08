@@ -2,4 +2,5 @@ PATH=/usr/local/terraform/bin:/home/$USER/terraform:$PATH
 export TF_VAR_USER=$USER;
 export TF_VAR_PASS=$OS_PASSWORD;
 # EDITAR el nombre de la KEY (hint: nova keypair-list)
-export TF_VAR_USER_KEY="navarrow";
+export TF_VAR_USER_KEY="MODIFICAR";
+
