@@ -24,8 +24,9 @@ init:
 	gcloud init --console-only
 
 install:
-	wget -O /tmp/google-cloud-sdk-120.0.0-linux-x86_64.tar.gz https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-sdk-120.0.0-linux-x86_64.tar.gz
-	cd /tmp && tar -zxvf /tmp/google-cloud-sdk-120.0.0-linux-x86_64.tar.gz && /tmp/google-cloud-sdk/install.sh
+	mkdir -p ~/tmp
+	wget -O ~/tmp/google-cloud-sdk-120.0.0-linux-x86_64.tar.gz https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-sdk-120.0.0-linux-x86_64.tar.gz
+	cd ~/tmp && tar -zxvf ~/tmp/google-cloud-sdk-120.0.0-linux-x86_64.tar.gz && ~/tmp/google-cloud-sdk/install.sh
 
 list: 
 	gcloud container clusters list
